@@ -2,10 +2,10 @@
 # Oasis Testing -----------------------------------------------------------
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
-p_load(tidyverse, lubridate, httr, progress, jsonlite, XML)
+p_load(dplyr, readr, tidyr, stringr, ggplot2, lubridate, httr, progress, jsonlite, xml2, XML)
 
 
-base_url <- "http://oasis.casio.com/oasisapi/"
+base_url <- "http://oasis.caiso.com/oasisapi/"
 
 # Hours from GMT
 tz_hrs_from_gmt <- as.character(
