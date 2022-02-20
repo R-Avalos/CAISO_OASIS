@@ -1,9 +1,10 @@
 #### Price Node Locations ####
 # CAISO Atlas price node location
-# Pnode Listing
+# Pnode Listing (market price nodes)
 # APNode Listing (Aggregated pricing nodes)
 # ATL_PNODE_MAP Map of all Pnodes to each Trading Hub APNode
 # ATL_HUB  All Trading Hub APNodes in CAISO
+
 
 
 # Atlas Price Node --------------------------------------------------------
@@ -74,6 +75,12 @@ oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE")) {
   # query
   usethis::ui_info("Querying CAISO Oasis")
   zip_file <- oasis_api_atlas(query_name = node_type)
+  
+  
+  # check that query return a zip file
+  if (http_type(zip_file) != "application/x-zip-compressed") {
+    stop("API did not return a zip file", call. = FALSE)
+  }
   
   
   # create local folder to read xml file
