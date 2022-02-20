@@ -46,7 +46,8 @@ oasis_api_atlas <- function(
     base_url,
     "SingleZip",
     "?",
-    "queryname=ATL_PNODE",
+    "queryname=",
+    query_name, 
     "&",
     "APnode_type=",
     AP_node_type,
@@ -64,18 +65,15 @@ oasis_api_atlas <- function(
 }
 
 
-test <- oasis_api_atlas()
-
-usethis::ui_info(paste0("test", "concate"))
 
 
-oasis_atlas_pnodes <- function() {
+oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE")) {
   # single or multiple
   # To do for specific location selection vs return all
   
   # query
   usethis::ui_info("Querying CAISO Oasis")
-  zip_file <- oasis_api_atlas()
+  zip_file <- oasis_api_atlas(query_name = node_type)
   
   
   # create local folder to read xml file
@@ -109,46 +107,10 @@ oasis_atlas_pnodes <- function() {
 }
 
 
-price_nodes <- oasis_atlas_pnodes()
+# Return Price Nodes ------------------------------------------------------
+# individual nodes
+price_nodes <- oasis_atlas_pnodes(node_type = "ATL_PNODE")
 
+# aggregate nodes / sub-load aggregation points
+AP_nodes <- oasis_atlas_pnodes(node_type = "ATL_APNODE")
 
-
-
-
-# Update Section ----------------------------------------------------------
-# Allow for single pnode data pull
-# Allow for Aggregatd Price Nodes  
-
-pnode_xml <- as_list(read_xml(x = "20210601_20210601_ATL_PNODE_N_20220205_14_12_18_v1.xml"))
-
-xml_df <- tibble::as_tibble(pnode_xml$OASISMaster$MessagePayload) %>%
-  unnest_longer(RTO)
-
-
-test <- xml_df %>%
-  filter(RTO_id == "ATLS_DATA")
-
-test2 <- test %>%
-  unnest_wider('RTO')
-
-test3 <- test2 %>% unnest(cols = names(.))
-
-## Transform xml
-pnode <- tibble::as_tibble(pnode_xml$OASISMaster$MessagePayload) %>%
-  unnest_longer(RTO) %>%
-  filter(RTO_id == "ATLS_DATA") %>%
-  unnest_wider('RTO') %>%
-  unnest(cols = names(.)) %>%
-  unnest(cols = names(.)) %>%
-  readr::type_convert() 
-
-# Splitting areas will have to deal better with single letter prefixes...
-pnode %>%
-  unnest(cols = names(.)) %>%
-  separate(col = PNODE_NAME, into = c("node_area", "node_area_point"), sep = "_", extra = "merge", remove = FALSE) %>%
-  filter(node_area =="S")
-  group_by(node_area) %>%
-  summarise(n = n()) %>%
-  arrange(desc(n)) %>%
-  ggplot(aes(x = n)) +
-  geom_histogram()

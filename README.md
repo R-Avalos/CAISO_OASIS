@@ -8,3 +8,4 @@ Currently in initial stage to:
 2. Parse received XML (some data is CSV and XML, some only XML :/ )
 3. Focus Atlas data for Nodes and Load Aggregation Points
 4. Historical pricing by node calls
+5. Convert to Package
