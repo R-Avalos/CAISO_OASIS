@@ -19,6 +19,23 @@ tz_hrs_from_gmt <- as.character(
 tz_hrs_from_gmt
 
 
+# Convert date to OASIS date time format
+# "20220101T07:00-0000"
+
+caiso_datetime <- function(date = Sys.Date(), time = "00:00", timezone = tz_hrs_from_gmt) {
+  
+  # specific format for CAISO date times in queries
+  paste0(str_remove_all(as.character(Sys.Date()), "-"), 
+         "T",
+         as.character(time),
+         "-",
+         as.character(tz_hrs_from_gmt)
+  )
+}
+
+caiso_datetime()
+
+
 # XML errors --------------------------------------------------------------
 
 xml_error_reference <- tibble(error_code = 1000:1020,
