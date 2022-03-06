@@ -9,54 +9,12 @@
 
 # Atlas Price Node --------------------------------------------------------
 
-
-# oasis_api_atlas <- function(
-#   query_name = c("ATL_PNODE", "ATL_APNODE"),
-#   AP_node_type = "ALL",
-#   start_date = "20220101T07:00-0000",
-#   end_date =   "20220102T07:00-0000",
-#   api_version = "1"
-#   ) {
-#   
-#   # tidy inputs
-#   AP_node_type <- toupper(AP_node_type)
-#   match.arg(query_name)
-#   
-#   # query api
-#   GET(url = paste0(
-#     base_url,
-#     "SingleZip",
-#     "?",
-#     "queryname=",
-#     query_name, 
-#     "&",
-#     "APnode_type=",
-#     AP_node_type,
-#     "&",
-#     "startdatetime=",
-#     start_date,
-#     "&",
-#     "enddatetime=",
-#     end_date,
-#     "&",
-#     "version=",
-#     api_version
-#     )
-#     )
-# }
-
-
-
-
-oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE"),
+oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE", "ATL_LDF", "ATL_LAP"),
                                specific_pnode_id = NULL, 
                                AP_node_type = "ALL", 
                                start_date = "20220101T07:00-0000",
                                end_date = "20220102T07:00-0000"
                                ) {
-  # single or multiple
-  # To do for specific location selection vs return all
-  
   # tidy inputs
   AP_node_type <- toupper(AP_node_type)
   match.arg(node_type)
@@ -164,3 +122,11 @@ AP_nodes <- oasis_atlas_pnodes(node_type = "ATL_APNODE")
 # single node
 # SFPPCNC_6_N001
 node_SFPPCNC_6_N001 <- oasis_atlas_pnodes(node_type = "ATL_PNODE", specific_pnode_id = "SFPPCNC_6_N001")
+
+# Load Distribution factors
+atl_ldf <- oasis_atlas_pnodes(node_typ = "ATL_LDF")
+
+# Load aggregation point listing
+atl_lap <- oasis_atlas_pnodes(node_type = "ATL_LAP")
+
+
