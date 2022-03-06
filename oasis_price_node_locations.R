@@ -8,73 +8,113 @@
 
 
 # Atlas Price Node --------------------------------------------------------
-http_status(GET(paste0("http://oasis.caiso.com/oasisapi/", 
-                       "SingleZip?",
-                       "queryname=ATL_PNODE",
-                       "&",
-                       "Pnode_id=12THST_6_N1010",
-                       "&",
-                       "Pnode_type=ALL", 
-                       "stardatetime=",
-                       "20220101T07:00-0700",
-                       "&",
-                       "enddatetime=",
-                       "20220102T07:00-0700",
-                       "&",
-                       "version=1")))
+
+
+# oasis_api_atlas <- function(
+#   query_name = c("ATL_PNODE", "ATL_APNODE"),
+#   AP_node_type = "ALL",
+#   start_date = "20220101T07:00-0000",
+#   end_date =   "20220102T07:00-0000",
+#   api_version = "1"
+#   ) {
+#   
+#   # tidy inputs
+#   AP_node_type <- toupper(AP_node_type)
+#   match.arg(query_name)
+#   
+#   # query api
+#   GET(url = paste0(
+#     base_url,
+#     "SingleZip",
+#     "?",
+#     "queryname=",
+#     query_name, 
+#     "&",
+#     "APnode_type=",
+#     AP_node_type,
+#     "&",
+#     "startdatetime=",
+#     start_date,
+#     "&",
+#     "enddatetime=",
+#     end_date,
+#     "&",
+#     "version=",
+#     api_version
+#     )
+#     )
+# }
 
 
 
 
-# Download zip
-# Extract to temp file
-# save xml extraction to local and remove temp
-
-oasis_api_atlas <- function(
-  query_name = c("ATL_PNODE", "ATL_APNODE"),
-  AP_node_type = "ALL",
-  start_date = "20220101T07:00-0000",
-  end_date = "20220102T07:00-0000",
-  api_version = "1"
-  ) {
-  
-  # tidy inputs
-  AP_node_type <- toupper(AP_node_type)
-  match.arg(query_name)
-  
-  # query api
-  GET(url = paste0(
-    base_url,
-    "SingleZip",
-    "?",
-    "queryname=",
-    query_name, 
-    "&",
-    "APnode_type=",
-    AP_node_type,
-    "&",
-    "startdatetime=",
-    start_date,
-    "&",
-    "enddatetime=",
-    end_date,
-    "&",
-    "version=",
-    api_version
-    )
-    )
-}
-
-
-
-
-oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE")) {
+oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE"),
+                               specific_pnode_id = NULL, 
+                               AP_node_type = "ALL", 
+                               start_date = "20220101T07:00-0000",
+                               end_date = "20220102T07:00-0000"
+                               ) {
   # single or multiple
   # To do for specific location selection vs return all
   
+  # tidy inputs
+  AP_node_type <- toupper(AP_node_type)
+  match.arg(node_type)
+  
+  
   # query
   usethis::ui_info("Querying CAISO Oasis")
-  zip_file <- oasis_api_atlas(query_name = node_type)
+  
+  if(is.null(specific_pnode_id)) {
+    zip_file <- GET(
+      url = paste0(
+        base_url,
+        "SingleZip",
+        "?", 
+        "queryname=", 
+        node_type,
+        "&",
+        "APnode_type=",
+        AP_node_type,
+        "&", 
+        "startdatetime=",
+        start_date,
+        "&",
+        "enddatetime=",
+        end_date,
+        "&",
+        "version=",
+        api_version
+      )
+    ) 
+  }
+  
+  if(!is.null(specific_pnode_id)) { 
+    zip_file <- GET(
+      url = paste0(
+        base_url,
+        "SingleZip",
+        "?", 
+        "queryname=", 
+        node_type,
+        "&",
+        "Pnode_id=",
+        specific_pnode_id, 
+        "&", 
+        "APnode_type=",
+        AP_node_type,
+        "&", 
+        "startdatetime=",
+        start_date,
+        "&",
+        "enddatetime=",
+        end_date,
+        "&",
+        "version=",
+        api_version
+      )
+    )
+  }
   
   
   # check that query return a zip file
@@ -115,9 +155,12 @@ oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE")) {
 
 
 # Return Price Nodes ------------------------------------------------------
-# individual nodes
+# all individual nodes
 price_nodes <- oasis_atlas_pnodes(node_type = "ATL_PNODE")
 
 # aggregate nodes / sub-load aggregation points
 AP_nodes <- oasis_atlas_pnodes(node_type = "ATL_APNODE")
 
+# single node
+# SFPPCNC_6_N001
+node_SFPPCNC_6_N001 <- oasis_atlas_pnodes(node_type = "ATL_PNODE", specific_pnode_id = "SFPPCNC_6_N001")

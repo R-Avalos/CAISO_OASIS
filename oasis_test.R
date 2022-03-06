@@ -46,12 +46,16 @@ xml_error_reference <- tibble(error_code = 1000:1020,
                               )
 xml_error_reference
 
-# Base Path ---------------------------------------------------------------
 
+# Base Parameters ---------------------------------------------------------
+# Base Path 
 oasis_api <- function(path) {
   url <- modify_url(base_url, path = path)
   GET(url)
 }
+api_version = "1"
+
+
 
 # http://www.caiso.com/Documents/OASIS-InterfaceSpecification_v5_1_1Clean_Fall2017Release.pdf
 
