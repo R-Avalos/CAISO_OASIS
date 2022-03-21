@@ -9,12 +9,13 @@ base_url <- "http://oasis.caiso.com/oasisapi/"
 
 # Hours from GMT
 tz_hrs_from_gmt <- as.character(
-  round(
-  as.numeric(
-  str_pad(string = paste0(as.numeric(force_tz(with_tz(Sys.time(), "GMT")) - Sys.time()), "00"), 
+  round(as.numeric(str_pad(string = paste0(as.numeric(force_tz(with_tz(Sys.time(), "GMT")) - Sys.time()), "00"), 
                            width = 4, 
                            side = "left", 
-                           pad = "0"))))
+                           pad = "0")
+                   )
+        )
+  )
 
 tz_hrs_from_gmt
 
@@ -27,13 +28,16 @@ caiso_datetime <- function(date = Sys.Date(), time = "00:00", timezone = tz_hrs_
   # specific format for CAISO date times in queries
   paste0(str_remove_all(as.character(Sys.Date()), "-"), 
          "T",
-         as.character(time),
+         as.character("00:00"),
          "-",
-         as.character(tz_hrs_from_gmt)
+         str_pad(tz_hrs_from_gmt, width = 4, side = "left", pad = "0")
   )
 }
 
 caiso_datetime()
+
+
+
 
 
 # XML errors --------------------------------------------------------------
