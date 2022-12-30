@@ -9,7 +9,7 @@
 
 # Atlas Price Node --------------------------------------------------------
 
-oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE", "ATL_LDF", "ATL_LAP", "ATL_HUB", "ATL_PNODE_MAP"),
+get_price_nodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE", "ATL_LDF", "ATL_LAP", "ATL_HUB", "ATL_PNODE_MAP"),
                                specific_pnode_id = NULL, 
                                AP_node_type = "ALL", 
                                start_date = "20220101T07:00-0000",
@@ -23,6 +23,7 @@ oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE", "ATL_LDF
   # query
   usethis::ui_info("Querying CAISO Oasis")
   
+  # if a specific node has not been stated, return all nodes else return specific node
   if(is.null(specific_pnode_id)) {
     zip_file <- GET(
       url = paste0(
@@ -114,26 +115,26 @@ oasis_atlas_pnodes <- function(node_type = c("ATL_PNODE", "ATL_APNODE", "ATL_LDF
 
 # Return Price Nodes ------------------------------------------------------
 # all individual nodes
-price_nodes <- oasis_atlas_pnodes(node_type = "ATL_PNODE")
+price_nodes <- get_price_nodes(node_type = "ATL_PNODE")
 
 # aggregate nodes / sub-load aggregation points
-AP_nodes <- oasis_atlas_pnodes(node_type = "ATL_APNODE")
+AP_nodes <- get_price_nodes(node_type = "ATL_APNODE")
 
 # single node
 # SFPPCNC_6_N001
-node_SFPPCNC_6_N001 <- oasis_atlas_pnodes(node_type = "ATL_PNODE", specific_pnode_id = "SFPPCNC_6_N001")
+node_SFPPCNC_6_N001 <- get_price_nodes(node_type = "ATL_PNODE", specific_pnode_id = "SFPPCNC_6_N001")
 
 # Load Distribution factors
-atl_ldf <- oasis_atlas_pnodes(node_typ = "ATL_LDF")
+atl_ldf <- get_price_nodes(node_typ = "ATL_LDF")
 
 # Load aggregation point listing
-atl_lap <- oasis_atlas_pnodes(node_type = "ATL_LAP")
+atl_lap <- get_price_nodes(node_type = "ATL_LAP")
 
 # Trading hub APnode listing
-atl_hub <- oasis_atlas_pnodes(node_type = "ATL_HUB")
+atl_hub <- get_price_nodes(node_type = "ATL_HUB")
 
 # Pnode map to trading hub APnode
-atl_hub_pnode <- oasis_atlas_pnodes(node_type = c("ATL_PNODE_MAP"))
+atl_hub_pnode <- get_price_nodes(node_type = c("ATL_PNODE_MAP"))
 
 
 # Atlas Market Resources --------------------------------------------------
