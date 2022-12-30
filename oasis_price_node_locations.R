@@ -139,7 +139,7 @@ atl_hub_pnode <- get_price_nodes(node_type = c("ATL_PNODE_MAP"))
 
 # Atlas Market Resources --------------------------------------------------
 
-oasis_atlas_resources <- function(node_type = c("ATL_RESOURCE"),
+get_market_resources <- function(node_type = c("ATL_RESOURCE"),
                                specific_resource_id = NULL, 
                                resource_type = "ALL", 
                                start_date = "20220101T07:00-0000",
@@ -243,4 +243,4 @@ oasis_atlas_resources <- function(node_type = c("ATL_RESOURCE"),
   return(pnode)
 }
 
-market_resources <- oasis_atlas_resources(node_type = "ATL_RESOURCE")
+market_resources <- get_market_resources(node_type = "ATL_RESOURCE")
