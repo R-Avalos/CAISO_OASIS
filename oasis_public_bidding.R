@@ -8,9 +8,6 @@
 # 19T07:00-0000&version=1 (for DAM)
 
 
-# check date > T+90
-"20220101T07:00-0000"
-
 
 get_bids <- function(bid_type = c("PUB_DAM_GRP"),
                              start_date = "20220101T07:00-0000",
@@ -22,6 +19,9 @@ get_bids <- function(bid_type = c("PUB_DAM_GRP"),
   
   
   # check dates are > T+90
+  if(today()-90 > ymd(str_sub(start_date, start = 1, end = 8))) {usethis::ui_info("T+90 Check Passed")} 
+  else {stop("Trade Date is less than 90 days ago, data not available")}
+  
   
   
   # query
