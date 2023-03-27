@@ -1,5 +1,6 @@
 
 # Oasis Testing -----------------------------------------------------------
+# http://www.caiso.com/Documents/OASIS-InterfaceSpecification_v5_1_1Clean_Fall2017Release.pdf
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(dplyr, readr, tidyr, stringr, ggplot2, lubridate, httr, progress, jsonlite, xml2, XML)
@@ -8,16 +9,7 @@ p_load(dplyr, readr, tidyr, stringr, ggplot2, lubridate, httr, progress, jsonlit
 base_url <- "http://oasis.caiso.com/oasisapi/"
 
 # Hours from GMT
-tz_hrs_from_gmt <- as.character(
-  round(as.numeric(str_pad(string = paste0(as.numeric(force_tz(with_tz(Sys.time(), "GMT")) - Sys.time()), "00"), 
-                           width = 4, 
-                           side = "left", 
-                           pad = "0")
-                   )
-        )
-  )
-
-tz_hrs_from_gmt
+tz_hrs_from_gmt <- str_pad(string = paste0(round(as.numeric(force_tz(with_tz(Sys.time(), "GMT")) - Sys.time())), "00"), width = 4, side = "left", pad = "0")
 
 
 # Convert date to OASIS date time format
